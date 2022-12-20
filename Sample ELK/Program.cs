@@ -1,3 +1,5 @@
+using Elastic.Clients.Elasticsearch.Core.GetScriptContext;
+using Nest;
 using Serilog;
 
 namespace Sample_ELK

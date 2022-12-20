@@ -1,0 +1,56 @@
+﻿@model ELK_MVC.Models.ViewModel.ResponseVm
+<style>
+    .control{
+        display: inline-block;
+    }
+</style>
+<form asp-action="GetReport" asp-controller="Home" method="post" class="">
+    <div class="form-control">
+        <div class="col-md-2 control">
+            <label class="form-label" asp-for="SearchModel.Size"></label>
+            <input class="form-control" asp-for="SearchModel.Size" />
+        </div>
+        <div class="col-md-2 control" >
+            <label class="form-label" asp-for="SearchModel.Skip"></label>
+            <input class="form-control" asp-for="SearchModel.Skip" />
+        </div>
+        <div class="col-md-2 control">
+            <label class="form-label" asp-for="SearchModel.From"></label>
+            <input class="form-control" asp-for="SearchModel.From" />
+        </div>
+        <div class="col-md-2 control">
+            <label class="form-label" asp-for="SearchModel.To"></label>
+            <input class="form-control" asp-for="SearchModel.To" />
+        </div>
+        <div class="col-md-2 control">
+            <label class="form-label" asp-for="SearchModel.level"></label>
+            <input class="form-control" asp-for="SearchModel.level" />
+        </div>
+        <button class="btn btn-primary" type="submit">Send</button>
+    </div>
+</form>
+<hr />
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <th scope="col">timestamp</th>
+            <th scope="col">level</th>
+            <th scope="col">messageTemplate</th>
+            <th scope="col">message</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var item in Model.Reports)
+            {
+                <tr>
+                    <th scope="row">@item.Timestamp</th>
+                    <td>@item.Level</td>
+                    <td>@item.MessageTemplate</td>
+                    <td>@item.Message</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

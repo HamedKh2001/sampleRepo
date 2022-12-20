@@ -1,6 +1,8 @@
-using Elastic.Clients.Elasticsearch;
+using ELK_MVC.Models;
 using Microsoft.AspNetCore.Mvc;
+using Nest;
 using Newtonsoft.Json;
+using System.Collections.Immutable;
 
 namespace Sample_ELK.Controllers
 {
@@ -8,7 +10,7 @@ namespace Sample_ELK.Controllers
     [Route("[controller]/[action]")]
     public class WeatherForecastController : ControllerBase
     {
-        private readonly ElasticsearchClient _client;
+        private readonly IElasticClient _client;
         private static readonly string[] Summaries = new[]
         {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -18,7 +20,7 @@ namespace Sample_ELK.Controllers
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
-            _client = new ElasticsearchClient();
+            _client = new ElasticClient(new Uri("http://localhost:9200"));
             _logger = logger;
         }
 
@@ -51,7 +53,7 @@ namespace Sample_ELK.Controllers
 
             var response = await _client.IndexAsync(tweet, request => request.Index("my-tweet-index"));
 
-            if (response.IsValidResponse)
+            if (response.IsValid)
             {
                 Console.WriteLine($"Index document with ID {response.Id} succeeded.");
             }
@@ -77,35 +79,40 @@ namespace Sample_ELK.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<Root> GetId(int id)
+        public async Task<LogReport> GetId(int id)
         {
-            var response = await _client.GetAsync<Root>(id, idx => idx.Index("mywebapilog-logs-2022.12.18"));
+            var response = await _client.GetAsync<LogReport>(id, idx => idx.Index("mywebapilog-logs-2022.12.18"));
             var src = response.Source;
             return src;
         }
 
         [HttpGet]
-        public async Task<List<Root>> Get()
+        public async Task<List<LogReport>> Get()
         {
             //    var response = await _client.SearchAsync<Root>(s => s
             //        .Index("mywebapilog-logs-2022.12.18")
             //        .Query(q => q.QueryString(qs => qs.Query('*' + "Error" + '*')))
             //    );
-            var response = await _client.SearchAsync<object>(s => s
-                .Index("mywebapilog-logs-2022.12.18")
+            var response = await _client.SearchAsync<Dictionary<string,object>>(s => s
+                .Index("mywebapilog-logs-*")
                 .From(0)
-                .Size(2000)
-                //.Query(q => q
-                //    .Term(t => t.level, "Error"))
-                .Query(q => q.QueryString(qs => qs.Query("level : Error")))
-            );
+                .Size(200)
+                .Query(q => q.QueryString(qs => qs.Query("level : Error"))));
 
-            if (response.IsValidResponse)
+            if (response.IsValid)
             {
-                var res = response.Documents.Select(s=> JsonConvert.DeserializeObject<Root>(s.ToString())).ToList();
+                Console.WriteLine(response.Documents.First().Keys.First());
+                Console.WriteLine(response.Documents.First().Values.First());
+                var x = JsonConvert.SerializeObject(response.Documents.First());
+                var res = response.Documents.Select(s => JsonConvert.DeserializeObject<LogReport>(x)).ToList();
                 return res;
             }
             return null;
         }
+
+        //private static T GetObject<T>(this Dictionary<string, object> dict)
+        //{
+        //    return (T)GetObject(dict, typeof(T));
+        //}
     }
 }

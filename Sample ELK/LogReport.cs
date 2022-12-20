@@ -1,7 +1,7 @@
 ﻿using Elastic.Clients.Elasticsearch;
 using Newtonsoft.Json;
 
-namespace Sample_ELK
+namespace ELK_MVC.Models
 {
     public class EventId
     {
@@ -42,10 +42,10 @@ namespace Sample_ELK
         public string Environment { get; set; }
     }
 
-    public class Root
+    public class LogReport
     {
         [JsonProperty("@timestamp")]
-        public DateTime timestamp { get; set; }
+        public DateTimeOffset timestamp { get; set; }
         public string level { get; set; }
         public string messageTemplate { get; set; }
         public string message { get; set; }
