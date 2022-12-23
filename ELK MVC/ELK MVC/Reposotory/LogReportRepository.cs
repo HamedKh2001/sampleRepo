@@ -2,7 +2,6 @@
 using Nest;
 using Newtonsoft.Json;
 using Sample_ELK;
-using System;
 using System.Globalization;
 using System.Text;
 
@@ -18,11 +17,10 @@ namespace ELK_MVC.Reposotory
             _client = elasticClient;
             BaseIndex = configuration.GetValue<string>("ElasticConfiguration:Index");
         }
+
+
         public async Task<List<LogReport>> GetReports(SearchModel searchModel)
         {
-            var query = new StringBuilder();
-            query.Append(QueryLevel(searchModel.LogLevels));
-            List<Func<QueryContainerDescriptor<object>, QueryContainer>> queries = new();
             var From = searchModel.From.ToString("yyyy-MM-dd'T'HH:mm:ss.fffK", CultureInfo.InvariantCulture);
             var To = searchModel.To.ToString("yyyy-MM-dd'T'HH:mm:ss.fffK", CultureInfo.InvariantCulture);
             var response = await _client.SearchAsync<object>(s => s
@@ -30,10 +28,10 @@ namespace ELK_MVC.Reposotory
                .From(searchModel.Skip)
                .Size(searchModel.Size)
                .Query(q => q.Bool(b => b
-                         .Filter(f => f.DateRange(dr => dr
-                         .Field("@timestamp")
-                             .GreaterThanOrEquals(From)
-                             .LessThanOrEquals(To)) && q.QueryString(q=>q.Query(query.ToString()))))));
+                         .Filter(f => ProvideDateRangeQuery(f, searchModel.From, searchModel.To) &&
+                             q.QueryString(q => q.Query(ProvideLogLevelQuery(searchModel.LogLevels).ToString())) &&
+                             q.QueryString(q => q.Query(ProvideApplicationNameQuery(searchModel.AppicationName).ToString()))
+                                 ))));
 
             if (response.IsValid)
             {
@@ -43,21 +41,43 @@ namespace ELK_MVC.Reposotory
             }
             return null;
         }
-        private StringBuilder QueryLevel(IEnumerable<Microsoft.Extensions.Logging.LogLevel> logLevels)
+
+        #region Helper
+        private StringBuilder ProvideLogLevelQuery(IEnumerable<Microsoft.Extensions.Logging.LogLevel> logLevels)
         {
-            //string query = "level : ";
             bool flag = false;
-            var queryString = new StringBuilder("level : ");
+            var queryString = new StringBuilder();
             if (logLevels.Any())
+            {
+                queryString.Append("level : ");
                 foreach (var lvl in logLevels)
                 {
                     if (flag)
                         queryString.Append($" or ");
 
-                    queryString.Append($"{Enum.GetName(lvl)}");
+                    queryString.Append($"\"{Enum.GetName(lvl)}\"");
                     flag = true;
                 }
+            }
             return queryString;
         }
+        private StringBuilder ProvideApplicationNameQuery(string applicationName)
+        {
+            var queryString = new StringBuilder();
+            if (!string.IsNullOrWhiteSpace(applicationName))
+                queryString.Append($"fields.ApplicationName : \"{applicationName}\"");
+            else
+                queryString.Append("");
+
+            return queryString;
+        }
+        private QueryContainer ProvideDateRangeQuery(QueryContainerDescriptor<object> queryContainerDescriptor, DateTime from, DateTime to)
+        {
+            return queryContainerDescriptor.DateRange(dr => dr
+                          .Field("@timestamp")
+                              .GreaterThanOrEquals(from)
+                              .LessThanOrEquals(to));
+        }
+        #endregion
     }
 }
