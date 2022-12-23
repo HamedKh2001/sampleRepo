@@ -1,8 +1,5 @@
-using ELK_MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Nest;
-using Newtonsoft.Json;
-using System.Collections.Immutable;
 
 namespace Sample_ELK.Controllers
 {
@@ -57,8 +54,6 @@ namespace Sample_ELK.Controllers
             {
                 Console.WriteLine($"Index document with ID {response.Id} succeeded.");
             }
-
-
         }
 
 
@@ -77,42 +72,5 @@ namespace Sample_ELK.Controllers
             })
             .ToArray();
         }
-
-        [HttpGet("{id}")]
-        public async Task<LogReport> GetId(int id)
-        {
-            var response = await _client.GetAsync<LogReport>(id, idx => idx.Index("mywebapilog-logs-2022.12.18"));
-            var src = response.Source;
-            return src;
-        }
-
-        [HttpGet]
-        public async Task<List<LogReport>> Get()
-        {
-            //    var response = await _client.SearchAsync<Root>(s => s
-            //        .Index("mywebapilog-logs-2022.12.18")
-            //        .Query(q => q.QueryString(qs => qs.Query('*' + "Error" + '*')))
-            //    );
-            var response = await _client.SearchAsync<Dictionary<string,object>>(s => s
-                .Index("mywebapilog-logs-*")
-                .From(0)
-                .Size(200)
-                .Query(q => q.QueryString(qs => qs.Query("level : Error"))));
-
-            if (response.IsValid)
-            {
-                Console.WriteLine(response.Documents.First().Keys.First());
-                Console.WriteLine(response.Documents.First().Values.First());
-                var x = JsonConvert.SerializeObject(response.Documents.First());
-                var res = response.Documents.Select(s => JsonConvert.DeserializeObject<LogReport>(x)).ToList();
-                return res;
-            }
-            return null;
-        }
-
-        //private static T GetObject<T>(this Dictionary<string, object> dict)
-        //{
-        //    return (T)GetObject(dict, typeof(T));
-        //}
     }
 }

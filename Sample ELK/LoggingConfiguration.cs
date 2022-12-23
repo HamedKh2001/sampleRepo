@@ -17,7 +17,10 @@ namespace Sample_ELK
         .Enrich.WithProperty("Environment", env.EnvironmentName)
         .Enrich.WithExceptionDetails();
             #endregion
-            configuration.WriteTo.Console().MinimumLevel.Information();
+            if (env.IsDevelopment())
+            {
+                configuration.WriteTo.Console().MinimumLevel.Information();
+            }
 
 
             #region ElasticSearch Configuration.

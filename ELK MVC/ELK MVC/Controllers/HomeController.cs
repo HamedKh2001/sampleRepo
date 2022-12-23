@@ -31,12 +31,6 @@ namespace ELK_MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> GetReport(ResponseVm responseVm)
         {
-            //searchModel.level = new List<LogLevels>
-            //{
-            //    LogLevels.Error,
-            //    LogLevels.Information,
-            //    LogLevels.Debug,
-            //};
             var res = await _logReportRepository.GetReports(responseVm.SearchModel);
             responseVm.Reports.AddRange(res);
             return View(responseVm);

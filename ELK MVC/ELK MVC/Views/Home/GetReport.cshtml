@@ -1,6 +1,6 @@
 ﻿@model ELK_MVC.Models.ViewModel.ResponseVm
 <style>
-    .control{
+    .control {
         display: inline-block;
     }
 </style>
@@ -10,7 +10,7 @@
             <label class="form-label" asp-for="SearchModel.Size"></label>
             <input class="form-control" asp-for="SearchModel.Size" />
         </div>
-        <div class="col-md-2 control" >
+        <div class="col-md-2 control">
             <label class="form-label" asp-for="SearchModel.Skip"></label>
             <input class="form-control" asp-for="SearchModel.Skip" />
         </div>
@@ -23,13 +23,25 @@
             <input class="form-control" asp-for="SearchModel.To" />
         </div>
         <div class="col-md-2 control">
-            <label class="form-label" asp-for="SearchModel.level"></label>
-            <input class="form-control" asp-for="SearchModel.level" />
+            <label class="form-label" asp-for="SearchModel.LogLevels"></label>
+            <select class="form-control" asp-for="SearchModel.LogLevels">
+                <option value="0">Trace</option>
+                <option value="1">Debug</option>
+                <option value="2">Information</option>
+                <option value="3">Warning</option>
+                <option value="4">Error</option>
+                <option value="5">Critical</option>
+                <option value="6">None</option>
+            </select>
         </div>
         <button class="btn btn-primary" type="submit">Send</button>
     </div>
 </form>
 <hr />
+@if (Model != null)
+{
+    <p class="control">Total Records : @Model.Reports.Count</p>
+}
 <table class="table table-dark">
     <thead>
         <tr>
@@ -45,10 +57,10 @@
             @foreach (var item in Model.Reports)
             {
                 <tr>
-                    <th scope="row">@item.Timestamp</th>
-                    <td>@item.Level</td>
-                    <td>@item.MessageTemplate</td>
-                    <td>@item.Message</td>
+                    <th scope="row">@item.timestamp</th>
+                    <td>@item.level</td>
+                    <td>@item.messageTemplate</td>
+                    <td>@item.message</td>
                 </tr>
             }
         }
