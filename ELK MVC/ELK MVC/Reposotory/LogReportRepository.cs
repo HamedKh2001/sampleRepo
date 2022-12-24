@@ -30,7 +30,8 @@ namespace ELK_MVC.Reposotory
                .Query(q => q.Bool(b => b
                          .Filter(f => ProvideDateRangeQuery(f, searchModel.From, searchModel.To) &&
                              q.QueryString(q => q.Query(ProvideLogLevelQuery(searchModel.LogLevels).ToString())) &&
-                             q.QueryString(q => q.Query(ProvideApplicationNameQuery(searchModel.AppicationName).ToString()))
+                             q.QueryString(q => q.Query(ProvideApplicationNameQuery(searchModel.AppicationName).ToString())) &&
+                             q.QueryString(q=>q.Query(ProvideMessageQuery(searchModel.Message).ToString()))
                                  ))));
 
             if (response.IsValid)
@@ -77,6 +78,16 @@ namespace ELK_MVC.Reposotory
                           .Field("@timestamp")
                               .GreaterThanOrEquals(from)
                               .LessThanOrEquals(to));
+        }
+        private StringBuilder ProvideMessageQuery(string message)
+        {
+            var queryString = new StringBuilder();
+            if (!string.IsNullOrWhiteSpace(message))
+                queryString.Append($"message : {message}");
+            else
+                queryString.Append("");
+
+            return queryString;
         }
         #endregion
     }
