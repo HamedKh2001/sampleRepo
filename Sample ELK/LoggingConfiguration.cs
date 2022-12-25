@@ -2,6 +2,7 @@
 using Serilog.Sinks.Elasticsearch;
 using Serilog;
 using Serilog.Exceptions;
+using Serilog.Context;
 
 namespace Sample_ELK
 {
@@ -15,6 +16,7 @@ namespace Sample_ELK
             configuration.Enrich.FromLogContext()
         .Enrich.WithProperty("ApplicationName", env.ApplicationName)
         .Enrich.WithProperty("Environment", env.EnvironmentName)
+        .Enrich.FromLogContext()
         .Enrich.WithExceptionDetails();
             #endregion
             if (env.IsDevelopment())
@@ -39,5 +41,23 @@ namespace Sample_ELK
             }
             #endregion
         };
+    }
+    public class LogUserNameMiddleware
+    {
+        private readonly RequestDelegate next;
+
+        public LogUserNameMiddleware(RequestDelegate next)
+        {
+            this.next = next;
+        }
+
+        public Task Invoke(HttpContext context)
+        {
+            LogContext.PushProperty("UserName", context.User.Identity.Name);
+            LogContext.PushProperty("RemoteIpAddress", context.Connection.RemoteIpAddress);
+            LogContext.PushProperty("RemotePort", context.Connection.RemotePort);
+
+            return next(context);
+        }
     }
 }

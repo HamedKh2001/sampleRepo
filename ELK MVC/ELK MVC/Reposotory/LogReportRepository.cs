@@ -31,7 +31,9 @@ namespace ELK_MVC.Reposotory
                          .Filter(f => ProvideDateRangeQuery(f, searchModel.From, searchModel.To) &&
                              q.QueryString(q => q.Query(ProvideLogLevelQuery(searchModel.LogLevels).ToString())) &&
                              q.QueryString(q => q.Query(ProvideApplicationNameQuery(searchModel.AppicationName).ToString())) &&
-                             q.QueryString(q=>q.Query(ProvideMessageQuery(searchModel.Message).ToString()))
+                             q.QueryString(q=>q.Query(ProvideMessageQuery(searchModel.Message).ToString())) &&
+                             q.QueryString(q => q.Query(ProvideUserNameQuery(searchModel.UserName).ToString())) && 
+                             q.QueryString(q => q.Query(ProvideRemoteIpAddressQuery(searchModel.RemoteIpAddress).ToString()))
                                  ))));
 
             if (response.IsValid)
@@ -84,6 +86,26 @@ namespace ELK_MVC.Reposotory
             var queryString = new StringBuilder();
             if (!string.IsNullOrWhiteSpace(message))
                 queryString.Append($"message : {message}");
+            else
+                queryString.Append("");
+
+            return queryString;
+        }
+        private StringBuilder ProvideUserNameQuery(string userName)
+        {
+            var queryString = new StringBuilder();
+            if (!string.IsNullOrWhiteSpace(userName))
+                queryString.Append($"fields.UserName : \"{userName}\"");
+            else
+                queryString.Append("");
+
+            return queryString;
+        }
+        private StringBuilder ProvideRemoteIpAddressQuery(string remoteIpAddress)
+        {
+            var queryString = new StringBuilder();
+            if (!string.IsNullOrWhiteSpace(remoteIpAddress))
+                queryString.Append($"fields.RemoteIpAddress : \"{remoteIpAddress}\"");
             else
                 queryString.Append("");
 

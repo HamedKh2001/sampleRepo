@@ -28,8 +28,8 @@ namespace Sample_ELK
 
             app.UseAuthorization();
 
-
             app.MapControllers();
+            app.UseMiddleware<LogUserNameMiddleware>();
 
             app.Run();
         }

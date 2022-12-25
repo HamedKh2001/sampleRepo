@@ -6,40 +6,52 @@
 </style>
 <form asp-action="GetReport" asp-controller="Home" method="post" class="">
     <div class="form-control">
-        <div class="col-md-2 control">
-            <label class="form-label" asp-for="SearchModel.Size"></label>
-            <input class="form-control" asp-for="SearchModel.Size" />
-        </div>
-        <div class="col-md-2 control">
-            <label class="form-label" asp-for="SearchModel.Skip"></label>
-            <input class="form-control" asp-for="SearchModel.Skip" />
-        </div>
-        <div class="col-md-2 control">
-            <label class="form-label" asp-for="SearchModel.From"></label>
-            <input class="form-control" asp-for="SearchModel.From" />
-        </div>
-        <div class="col-md-2 control">
-            <label class="form-label" asp-for="SearchModel.To"></label>
-            <input class="form-control" asp-for="SearchModel.To" />
-        </div>
-        <div class="col-md-2 control">
-            <label class="form-label" asp-for="SearchModel.AppicationName"></label>
-            <input class="form-control" asp-for="SearchModel.AppicationName" />
-        </div>
-        <div class="col-md-5 control">
-            <label class="form-label" asp-for="SearchModel.Message"></label>
-            <input class="form-control" asp-for="SearchModel.Message" />
-        </div>
-        <div class="col-md-2 control">
-            <label class="form-label" asp-for="SearchModel.LogLevels"></label>
-            <select class="form-control" asp-for="SearchModel.LogLevels">
-                <option value="0">Trace</option>
-                <option value="1">Debug</option>
-                <option value="2">Information</option>
-                <option value="3">Warning</option>
-                <option value="4">Error</option>
-                <option value="5">Critical</option>
-            </select>
+        <div class="form-control">
+            <div class="col-md-2 control">
+                <label class="form-label" asp-for="SearchModel.Size"></label>
+                <input class="form-control" asp-for="SearchModel.Size" />
+            </div>
+            <div class="col-md-2 control">
+                <label class="form-label" asp-for="SearchModel.Skip"></label>
+                <input class="form-control" asp-for="SearchModel.Skip" />
+            </div>
+            <div class="col-md-2 control">
+                <label class="form-label" asp-for="SearchModel.From"></label>
+                <input class="form-control" asp-for="SearchModel.From" />
+            </div>
+            <div class="col-md-2 control">
+                <label class="form-label" asp-for="SearchModel.To"></label>
+                <input class="form-control" asp-for="SearchModel.To" />
+            </div>
+            <div class="col-md-2 control">
+                <label class="form-label" asp-for="SearchModel.AppicationName"></label>
+                <input class="form-control" asp-for="SearchModel.AppicationName" />
+            </div>
+        </div><br />
+        <div class="form-control">
+            <div class="col-md-2 control">
+                <label class="form-label" asp-for="SearchModel.Message"></label>
+                <input class="form-control" asp-for="SearchModel.Message" />
+            </div>
+            <div class="col-md-2 control">
+                <label class="form-label" asp-for="SearchModel.UserName"></label>
+                <input class="form-control" asp-for="SearchModel.UserName" />
+            </div>
+            <div class="col-md-2 control">
+                <label class="form-label" asp-for="SearchModel.RemoteIpAddress"></label>
+                <input class="form-control" asp-for="SearchModel.RemoteIpAddress" />
+            </div>
+            <div class="col-md-4 control">
+                <label class="form-label" asp-for="SearchModel.LogLevels"></label>
+                <select class="form-control" asp-for="SearchModel.LogLevels">
+                    <option value="0">Trace</option>
+                    <option value="1">Debug</option>
+                    <option value="2">Information</option>
+                    <option value="3">Warning</option>
+                    <option value="4">Error</option>
+                    <option value="5">Critical</option>
+                </select>
+            </div>
         </div>
         <button class="btn btn-primary" type="submit">Send</button>
     </div>
