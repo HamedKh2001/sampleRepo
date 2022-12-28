@@ -3,6 +3,7 @@ using Serilog.Sinks.Elasticsearch;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Context;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace Sample_ELK
 {
@@ -53,9 +54,20 @@ namespace Sample_ELK
 
         public Task Invoke(HttpContext context)
         {
-            LogContext.PushProperty("UserName", context.User.Identity.Name);
-            LogContext.PushProperty("RemoteIpAddress", context.Connection.RemoteIpAddress);
+            LogContext.PushProperty("remote_user", context.User.Identity.Name);
+            LogContext.PushProperty("remote_addr", context.Connection.RemoteIpAddress);
             LogContext.PushProperty("RemotePort", context.Connection.RemotePort);
+            LogContext.PushProperty("status", context.Response.StatusCode);
+            LogContext.PushProperty("query_string", context.Request.QueryString.Value);
+            LogContext.PushProperty("server_addr", context.Connection.LocalIpAddress);
+            LogContext.PushProperty("LocalPort", context.Connection.LocalPort);
+            LogContext.PushProperty("server_protocol", context.Request.Protocol);
+            LogContext.PushProperty("uri", context.Request.GetDisplayUrl());
+            LogContext.PushProperty("request_method", context.Request.Method);
+            LogContext.PushProperty("hostname", context.Request.Host.Value);
+            LogContext.PushProperty("http_user_agent", context.Request.Headers["User-Agent"].ToString());
+            LogContext.PushProperty("bytes_sent", context.Request.ContentLength.HasValue ? context.Request.ContentLength.Value : null);
+            LogContext.PushProperty("bytes_received", context.Response.ContentLength.HasValue ? context.Response.ContentLength.Value : null);
 
             return next(context);
         }

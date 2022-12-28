@@ -22,8 +22,6 @@ namespace Sample_ELK.Controllers
         }
 
 
-
-
         public class Tweet
         {
             public int Id { get; set; }
