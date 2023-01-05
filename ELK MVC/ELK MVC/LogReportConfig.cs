@@ -3,7 +3,7 @@ using Nest;
 
 namespace ELK_MVC
 {
-    public static class LogReporter
+    public static class LogReportConfig
     {
         public static IServiceCollection AddLogReporter(this IServiceCollection services, Uri connectionString)
         {

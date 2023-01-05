@@ -7,6 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logger Project", "Sample EL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ELK MVC", "ELK MVC\ELK MVC\ELK MVC.csproj", "{0C96EE29-F9F0-42F2-881A-AFE6879B4CC1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "serilog-sinks-elasticsearch", "serilog-sinks-elasticsearch", "{DB1D5D54-8EA4-43E7-82F8-80F6C01F2D43}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Formatting.Elasticsearch", "Serilog.Formatting.Elasticsearch\Serilog.Formatting.Elasticsearch.csproj", "{79501C1A-B515-488F-9E8F-0D6188F78E7A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Sinks.Elasticsearch", "Serilog.Sinks.Elasticsearch\Serilog.Sinks.Elasticsearch.csproj", "{06CA57B6-7536-4980-B930-97FB07B99CC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +27,21 @@ Global
 		{0C96EE29-F9F0-42F2-881A-AFE6879B4CC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C96EE29-F9F0-42F2-881A-AFE6879B4CC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C96EE29-F9F0-42F2-881A-AFE6879B4CC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79501C1A-B515-488F-9E8F-0D6188F78E7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79501C1A-B515-488F-9E8F-0D6188F78E7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79501C1A-B515-488F-9E8F-0D6188F78E7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79501C1A-B515-488F-9E8F-0D6188F78E7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06CA57B6-7536-4980-B930-97FB07B99CC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06CA57B6-7536-4980-B930-97FB07B99CC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06CA57B6-7536-4980-B930-97FB07B99CC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06CA57B6-7536-4980-B930-97FB07B99CC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{79501C1A-B515-488F-9E8F-0D6188F78E7A} = {DB1D5D54-8EA4-43E7-82F8-80F6C01F2D43}
+		{06CA57B6-7536-4980-B930-97FB07B99CC5} = {DB1D5D54-8EA4-43E7-82F8-80F6C01F2D43}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {26CAEC9E-4B65-4D96-8983-76F76DDBFDF1}

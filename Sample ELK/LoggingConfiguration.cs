@@ -4,6 +4,7 @@ using Serilog;
 using Serilog.Exceptions;
 using Serilog.Context;
 using Microsoft.AspNetCore.Http.Extensions;
+using System.Globalization;
 
 namespace Sample_ELK
 {

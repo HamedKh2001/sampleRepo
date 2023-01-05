@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Nest;
+using Newtonsoft.Json;
 
 namespace Sample_ELK.Controllers
 {
@@ -13,14 +15,13 @@ namespace Sample_ELK.Controllers
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly Serilog.ILogger _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(Serilog.ILogger logger)
         {
             _client = new ElasticClient(new Uri("http://localhost:9200"));
             _logger = logger;
         }
-
 
         public class Tweet
         {
@@ -28,15 +29,24 @@ namespace Sample_ELK.Controllers
             public string User { get; set; }
             public DateTime PostDate { get; set; }
             public string Message { get; set; }
+            public virtual ICollection<User> Users { get; set; }
         }
 
         [HttpGet]
         public async void Create()
         {
+            var tweet2 = new Tweet()
+            {
+                Id = 1,
+                Message = "Trying out the client, so far so good?",
+                PostDate = DateTime.Now,
+                User = "User 1",
+
+            };
+            var serializedObj = JsonConvert.SerializeObject(tweet2, Formatting.Indented);
+            Console.WriteLine(serializedObj);
             var response1 = await _client.GetAsync<Tweet>(1, idx => idx.Index("my-tweet-index"));
             var tweet1 = response1.Source;
-
-
 
             var tweet = new Tweet
             {
@@ -58,10 +68,17 @@ namespace Sample_ELK.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> SetLog()
         {
-            _logger.LogInformation(Summaries[0].ToString());
-            _logger.LogCritical(Summaries[1].ToString());
-            _logger.LogWarning(Summaries[2].ToString());
-            _logger.LogError(Summaries[3].ToString());
+
+            try
+            {
+                var Zero = 0;
+                var x = 5 / Zero;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, ex.Message);
+            }
+            _logger.Information(Summaries[3].ToString());
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
@@ -70,5 +87,25 @@ namespace Sample_ELK.Controllers
             })
             .ToArray();
         }
+    }
+
+    public class User
+    {
+        public string UserName { get; set; }
+        public string NationalCode { get; set; }
+        public string PassportNo { get; set; }
+        public DateTime? PassportExpDate { get; set; }
+        public string Password { get; set; }
+        public string FirstName { get; set; }
+        public string FirstNameEn { get; set; }
+        public string LastName { get; set; }
+        public string LastNameEn { get; set; }
+        public string Mobile { get; set; }
+        public string ImageUrl { get; set; }
+        public bool IsActive { get; set; } = true;
+        public bool IsDelete { get; set; } = false;
+        public DateTime CreatedDate { get; set; }
+
+        public virtual ICollection<string> Groups { get; set; }
     }
 }

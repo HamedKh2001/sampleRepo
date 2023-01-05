@@ -1,7 +1,9 @@
-﻿using ELK_MVC.Models;
+﻿using Elastic.Clients.Elasticsearch.QueryDsl;
+using ELK_MVC.Models;
 using Nest;
 using Newtonsoft.Json;
 using Sample_ELK;
+using Serilog.Sinks.Elasticsearch.Tests.Domain;
 using System.Globalization;
 using System.Text;
 
@@ -21,6 +23,26 @@ namespace ELK_MVC.Reposotory
 
         public async Task<List<LogReport>> GetReports(SearchModel searchModel)
         {
+            var response1 = await _client.SearchAsync<object>(s => s
+                    .Index("mywebapilog-logs*")
+                    .From(0)
+                    .Size(100)
+                    //.Query(q => q.CommonTerms(c => c.Field(l => l.level).Query("Error")))
+                    .Query(q => q.QueryString(qs => qs.Query("level : Error")))
+                    );
+            var jsonList1 = JsonConvert.SerializeObject(response1.Documents);
+            var resault1 = JsonConvert.DeserializeObject<List<LogReport>>(jsonList1);
+            Console.WriteLine(jsonList1);
+
+            var x = response1.Documents;
+
+
+
+
+
+
+
+
             var From = searchModel.From.ToString("yyyy-MM-dd'T'HH:mm:ss.fffK", CultureInfo.InvariantCulture);
             var To = searchModel.To.ToString("yyyy-MM-dd'T'HH:mm:ss.fffK", CultureInfo.InvariantCulture);
             var response = await _client.SearchAsync<object>(s => s
@@ -31,8 +53,8 @@ namespace ELK_MVC.Reposotory
                          .Filter(f => ProvideDateRangeQuery(f, searchModel.From, searchModel.To) &&
                              q.QueryString(q => q.Query(ProvideLogLevelQuery(searchModel.LogLevels).ToString())) &&
                              q.QueryString(q => q.Query(ProvideApplicationNameQuery(searchModel.AppicationName).ToString())) &&
-                             q.QueryString(q=>q.Query(ProvideMessageQuery(searchModel.Message).ToString())) &&
-                             q.QueryString(q => q.Query(ProvideUserNameQuery(searchModel.UserName).ToString())) && 
+                             q.QueryString(q => q.Query(ProvideMessageQuery(searchModel.Message).ToString())) &&
+                             q.QueryString(q => q.Query(ProvideUserNameQuery(searchModel.UserName).ToString())) &&
                              q.QueryString(q => q.Query(ProvideRemoteIpAddressQuery(searchModel.RemoteIpAddress).ToString()))
                                  ))));
 

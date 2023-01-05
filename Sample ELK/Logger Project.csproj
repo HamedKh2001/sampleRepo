@@ -12,8 +12,12 @@
     <PackageReference Include="NEST" Version="7.17.5" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
     <PackageReference Include="Serilog.Exceptions" Version="6.0.0" />
-    <PackageReference Include="Serilog.Sinks.ElasticSearch" Version="8.4.1" />
+    
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Serilog.Sinks.Elasticsearch\Serilog.Sinks.Elasticsearch.csproj" />
   </ItemGroup>
 
 </Project>

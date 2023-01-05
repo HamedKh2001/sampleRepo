@@ -1,15 +1,25 @@
-﻿using Newtonsoft.Json;
-
-namespace Sample_ELK
+﻿namespace ELK_MVC.Models
 {
-    public class LogReport
+    public class Rootobject
     {
-        [JsonProperty("@timestamp")]
-        public DateTimeOffset timestamp { get; set; }
+        public string _index { get; set; }
+        public string _type { get; set; }
+        public string _id { get; set; }
+        public int _version { get; set; }
+        public object _score { get; set; }
+        public _Source _source { get; set; }
+        public Fields1 fields { get; set; }
+        public Highlight highlight { get; set; }
+        public long[] sort { get; set; }
+    }
+
+    public class _Source
+    {
+        public DateTime timestamp { get; set; }
         public string level { get; set; }
         public string messageTemplate { get; set; }
         public string message { get; set; }
-        public List<Exception> exceptions { get; set; }
+        public Exception[] exceptions { get; set; }
         public Fields fields { get; set; }
     }
 
@@ -39,12 +49,6 @@ namespace Sample_ELK
         public Exceptiondetail ExceptionDetail { get; set; }
     }
 
-    public class Eventid
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
-
     public class Exceptiondetail
     {
         public string Type { get; set; }
@@ -65,4 +69,15 @@ namespace Sample_ELK
         public int HResult { get; set; }
         public object HelpURL { get; set; }
     }
+
+    public class Fields1
+    {
+        public DateTime[] timestamp { get; set; }
+    }
+
+    public class Highlight
+    {
+        public string[] level { get; set; }
+    }
+
 }
