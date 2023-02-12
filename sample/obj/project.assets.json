@@ -230,11 +230,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\sample\\sample\\sample\\sample.csproj",
+      "projectUniqueName": "E:\\sampleRepo\\sample\\sample.csproj",
       "projectName": "sample",
-      "projectPath": "E:\\sample\\sample\\sample\\sample.csproj",
+      "projectPath": "E:\\sampleRepo\\sample\\sample.csproj",
       "packagesPath": "C:\\Users\\Favre\\.nuget\\packages\\",
-      "outputPath": "E:\\sample\\sample\\sample\\obj\\",
+      "outputPath": "E:\\sampleRepo\\sample\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
